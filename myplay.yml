@@ -2,12 +2,20 @@
 #ansy playbook start with three dash
 -
 ###this minus in yaml indicate a list of items. the play contains a list of play
-  hosts: ansiblenode
+  hosts: [nodes]
   vars:
-    motd_redhat: "welcome to ubuntu linux\n"
+    motd_ubuntu: "Hi Amit, welcome to ubuntu linux\n"
+    motd_redhat: "Hi Amit, Welcome to RedHat\n"
   
   tasks:
     - name: configure a motd message of the day in redhat
       copy:
+        content: "{{motd_ubuntu}}"
+        dest: /etc/motd
+      when: ansible_distribution=="Ubuntu"
+
+    - name: configure a motd message of the day in redhat
+      copy:
         content: "{{motd_redhat}}"
         dest: /etc/motd
+      when: ansible_distribution=="RedHat"
